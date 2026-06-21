@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pull code from Git
-                git branch: 'main', url: 'https://github.com/priyaranjansila-a11y/maven-project-priya.git'
+                git branch: 'master', url: 'https://github.com/priyaranjansila-a11y/maven-project-priya.git'
             }
         }
 
