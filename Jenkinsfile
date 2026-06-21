@@ -1,32 +1,42 @@
-pipeline{
- tools{
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
+pipeline {
+    agent 
+     {
+      label 'Springboot-Microservices'
+        }
+
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull code from Git
+                git branch: 'main', url: 'https://github.com/priyaranjansila-a11y/maven-project-priya.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Run Maven build
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                // Create JAR file
+                sh 'mvn package'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
+        }
     }
-     agent any
-	  
-	  stages{
-	  
-	  stage("checkout"){
-	   steps{
-	   git 'https://github.com/ashisnishanka/maven-project-11.git'
-	   }
-	                  }
-	
-	   stage("compile"){
-	    steps{
-		 sh 'mvn compile'
-		}
-		}
-	   stage("test"){
-	    steps{
-		 sh 'mvn test'
-		}
-		}
-	  stage("package"){
-	    steps{
-		 sh 'mvn package'
-		}
-		}
-	  }
-	}
+
+    post {
+        always {
+            echo 'Pipeline execution finished.'
+        }
+    }
+}
